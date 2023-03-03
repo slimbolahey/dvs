@@ -6,7 +6,7 @@ Citizen.CreateThread( function()
 		ped = GetPlayerPed(-1)
 
 		if IsPedInAnyVehicle(ped) then
-				SetCarHighSpeedBumpSeverityMultiplier(0,0)
-			end
+			SetCarHighSpeedBumpSeverityMultiplier(0,0)
 		end
+	end
 end)
