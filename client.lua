@@ -23,7 +23,7 @@ Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)  -- Yield the thread
 
-        local ped = GetPlayerPed(-1)
+        local ped = PlayerPedId()
 
         if DoesEntityExist(ped) and not IsEntityDead(ped) then
             local isInVehicle = IsPedInAnyVehicle(ped, false)
