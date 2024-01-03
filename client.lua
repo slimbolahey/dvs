@@ -1,38 +1,21 @@
-local pedInVehicle = false
-
--- Function to set high-speed bump severity multiplier
-local function SetBumpMultiplier()
+local function SetShakeMultiplier()
     SetCarHighSpeedBumpSeverityMultiplier(0, 0)
 end
 
--- Event handler for when the player enters a vehicle
-RegisterNetEvent('onClientVehicleEnter')
-AddEventHandler('onClientVehicleEnter', function()
-    pedInVehicle = true
-    SetBumpMultiplier()
-end)
-
--- Event handler for when the player exits a vehicle
-RegisterNetEvent('onClientVehicleExit')
-AddEventHandler('onClientVehicleExit', function()
-    pedInVehicle = false
-end)
-
--- Main loop to check if the player is in a vehicle
 Citizen.CreateThread(function()
+    local wasInVehicle = false
+
     while true do
-        Citizen.Wait(0)  -- Yield the thread
+        Citizen.Wait(500)
 
-        local ped = PlayerPedId()
+        local ped = GetPlayerPed(-1)
+        local isInVehicle = DoesEntityExist(ped) and not IsEntityDead(ped) and IsPedInAnyVehicle(ped, false)
 
-        if DoesEntityExist(ped) and not IsEntityDead(ped) then
-            local isInVehicle = IsPedInAnyVehicle(ped, false)
-            
-            if isInVehicle and not pedInVehicle then
-                TriggerEvent('onClientVehicleEnter')
-            elseif not isInVehicle and pedInVehicle then
-                TriggerEvent('onClientVehicleExit')
-            end
+        if isInVehicle and not wasInVehicle then
+            SetShakeMultiplier()
+            wasInVehicle = true
+        elseif not isInVehicle and wasInVehicle then
+            wasInVehicle = false
         end
     end
 end)
